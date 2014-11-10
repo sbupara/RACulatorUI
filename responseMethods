@@ -1,0 +1,34 @@
+function SetUpSpreadsheet() {
+  
+  // This code makes a copy of the current spreadsheet and names it appropriately
+  
+  var email = Session.getActiveUser().getEmail();
+  var ss = SpreadsheetApp.openById('1-WaTKsxUobVeDRpziD87itrFnckryhAdBUZLdvpLPNs');
+  var ss2 = ss.copy("Copy of " + ss.getName() + " for " + email);
+  var newFileAsString = ss2.getName();
+  
+  // This code gets the URL of the newly created sheet and provides a link to the user
+  var url = ss2.getUrl();
+  
+  // This code inserts a new sheet, generates a form specific to the sheet and collects the necessary data
+  var formUrl = ss2.getFormUrl();
+  Logger.log(formUrl);
+  
+};
+  
+  // Open a form by Url.
+function showFormInSidebar() {
+  FormApp.openByUrl(formUrl);
+  var formContent = UrlFetchApp.fetch(form.getPublishedUrl()).getContentText();
+  var ui = HtmlService.createHtmlOutput(formContent).setTitle("Google Form in Sidebar Example");
+  SpreadsheetApp.getUi().showSidebar(ui);
+    
+};
+
+
+function onOpen(e) {
+  // Add this add-on to Add-ons menu
+  SpreadsheetApp.getUi().createAddonMenu()
+      .addItem('Show form', 'showFormInSidebar')
+      .addToUi();
+};
